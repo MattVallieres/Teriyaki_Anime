@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 body {
-  white-space: nowrap;
   background-color: black;
   color: white;
 }

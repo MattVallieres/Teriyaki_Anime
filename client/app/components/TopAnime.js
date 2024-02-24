@@ -1,13 +1,13 @@
 "use client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export const Reccomendations = () => {
+export const TopAnime = () => {
   // variable to store the api infomation
-  const [recommend, setRecommend] = useState([]);
+  const [getPopular, setGetPopular] = useState([]);
   // variable to add a loading when the api is being fetched
   const [isLoading, setIsLoading] = useState(true);
 
@@ -19,9 +19,7 @@ export const Reccomendations = () => {
   // fetch the api
   const fetchData = async () => {
     try {
-      const response = await fetch(
-        `https://api.jikan.moe/v4/recommendations/anime`
-      );
+      const response = await fetch(`https://api.jikan.moe/v4/top/anime`);
       // checks if the response is successful
       if (!response.ok) {
         throw new Error(
@@ -30,9 +28,9 @@ export const Reccomendations = () => {
       }
       // parse the response as JSON
       const data = await response.json();
-      // shows only 20 anime 
+      // shows only 20 anime
       const slicedData = data.data.slice(0, 20);
-      setRecommend(slicedData);
+      setGetPopular(slicedData);
       // loading is set to false once fetched
       setIsLoading(false);
     } catch (error) {
@@ -56,7 +54,6 @@ export const Reccomendations = () => {
           arrows: true,
           slidesToShow: 3,
           slidesToScroll: 3,
-          
         },
       },
       {
@@ -73,7 +70,7 @@ export const Reccomendations = () => {
           arrows: false,
           slidesToShow: 2,
           slidesToScroll: 2,
-          initialSlide: 2
+          initialSlide: 2,
         },
       },
       {
@@ -81,7 +78,7 @@ export const Reccomendations = () => {
         settings: {
           arrows: false,
           slidesToShow: 1,
-          slidesToScroll: 1
+          slidesToScroll: 1,
         },
       },
     ],
@@ -90,25 +87,23 @@ export const Reccomendations = () => {
   return (
     <div className="mx-auto container px-2 my-20">
       <h1 className="border-l-4 pl-2 border-orange-600 font-bold text-2xl my-4">
-        Today's Recommendations
+        Popular Among The Fans
       </h1>
       <Slider {...settings} variableWidth={true}>
         {isLoading ? (
           <h1>loading...</h1>
         ) : (
-          recommend.map((x, index) => (
-            <div key={`${x.entry[1].mal_id}-${index}`} className="px-2">
-              <Link href={`/anime/${x.entry[1].mal_id}`}>
+          getPopular.map((x, index) => (
+            <div key={`${x.mal_id}-${index}`} className="px-2">
+              <Link href={`/anime/${x.mal_id}`}>
                 <img
-                  src={x.entry[1].images.jpg.large_image_url}
-                  alt={x.entry[1].title}
+                  src={x.images.jpg.large_image_url}
+                  alt={x.title}
                   className="w-60 h-80 object-fill"
                 />
               </Link>
               <h3 className="w-52 my-2">
-                {x.entry[1].title.length > 20
-                  ? `${x.entry[1].title.slice(0, 20)}...`
-                  : x.entry[1].title}
+                {x.title.length > 20 ? `${x.title.slice(0, 20)}...` : x.title}
               </h3>
             </div>
           ))
@@ -116,7 +111,7 @@ export const Reccomendations = () => {
       </Slider>
       <div className="mt-6">
         <Link
-          href="/recommendation"
+          href="/popular"
           className="border border-white uppercase font-bold p-2 px-4 duration-300 hover:border-orange-500 hover:text-orange-500 text-lg"
         >
           Browse more
