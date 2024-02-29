@@ -19,7 +19,7 @@ export const TopAnime = () => {
   // fetch the api
   const fetchData = async () => {
     try {
-      const response = await fetch(`https://api.jikan.moe/v4/top/anime`);
+      const response = await fetch(`http://localhost:8000/api/top/anime`);
       // checks if the response is successful
       if (!response.ok) {
         throw new Error(
@@ -29,7 +29,7 @@ export const TopAnime = () => {
       // parse the response as JSON
       const data = await response.json();
       // shows only 20 anime
-      const slicedData = data.data.slice(0, 20);
+      const slicedData = data.data.slice(0, 25);
       setGetPopular(slicedData);
       // loading is set to false once fetched
       setIsLoading(false);
@@ -99,12 +99,12 @@ export const TopAnime = () => {
                 <img
                   src={x.images.jpg.large_image_url}
                   alt={x.title}
-                  className="w-60 h-80 object-fill"
+                  className="h-96"
                 />
-              </Link>
               <h3 className="w-52 my-2">
                 {x.title.length > 20 ? `${x.title.slice(0, 20)}...` : x.title}
               </h3>
+              </Link>
             </div>
           ))
         )}
